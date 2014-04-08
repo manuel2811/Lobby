@@ -1,5 +1,7 @@
-package main;
+package at.minegames;
 
+
+import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
@@ -8,24 +10,32 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
+import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
+
 /**
  * Created by Manuel-PC on 05.04.2014.
  */
-public class teleporter implements Listener {
+public class test implements Listener {
 
-    private lobby instance = lobby.getInstance();
+
+    private main instance = main.getInstance();
+
 
     private ItemStack survivalGames = rename(new ItemStack(Material.WOOD_SWORD), "Survival Games");
 
-    public teleporter() {
+    public test() {
         instance.getServer().getPluginManager().registerEvents(this, instance);
     }
+
+
+
 
 
 
@@ -33,11 +43,13 @@ public class teleporter implements Listener {
     public void onPlayerInteract(PlayerInteractEvent e) {
         Player p = e.getPlayer();
 
+
         if (e.getAction() == Action.RIGHT_CLICK_AIR | e.getAction() == Action.RIGHT_CLICK_BLOCK) {
             if (e.getMaterial().equals(Material.NETHER_STAR)) {
                 Inventory inv = instance.getServer().createInventory(null, 27, "Teleportation");
                 inv.addItem(survivalGames);
                 p.openInventory(inv);
+
 
             }
         }
@@ -56,12 +68,36 @@ public class teleporter implements Listener {
         }
     }
 
+
     private ItemStack rename(ItemStack im, String name) {
         ItemMeta meta = im.getItemMeta();
         meta.setDisplayName(name);
         im.setItemMeta(meta);
         return im;
     }
+
+    @EventHandler
+    public void onDeath(PlayerDeathEvent e){
+    	Player p = e.getEntity();
+    	e.getDrops().clear();
+    	e.setDeathMessage(null);
+    	e.setDroppedExp(0);
+    	p.setGameMode(GameMode.SURVIVAL);
+    	
+    	
+    }
+
+    @EventHandler
+    public void onJoin(PlayerJoinEvent e){
+    	Player p = e.getPlayer();
+    	
+    	
+    	
+    	
+    	
+    	
+    }
+    
 
 
 }
